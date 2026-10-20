@@ -65,7 +65,8 @@
   .intro{margin-bottom:4mm !important}
 
   /* 채워진 값: 밑줄 친 일반 텍스트 (길면 자연스럽게 줄바꿈) */
-  .v{border-bottom:1px solid #000;padding:0 1.5mm;font-weight:600}
+  /* 사람마다 달라지는 입력값: 밑줄 없이 굵은 글씨 */
+  .v{font-weight:800;padding:0 .8mm}
   .v:empty{display:inline-block;vertical-align:bottom;height:1.3em;min-width:var(--w,25mm)}
   .cb{display:inline-block;width:3.4mm;height:3.4mm;border:1px solid #000;position:relative;vertical-align:-0.4mm;margin-right:1mm}
   .cb.on::after{content:'';position:absolute;left:1mm;top:0;width:1.1mm;height:2.2mm;border:solid #000;border-width:0 .45mm .45mm 0;transform:rotate(45deg)}
@@ -96,7 +97,7 @@
   .party .k{font-weight:700;white-space:nowrap}
   .party .wide{grid-column:2 / 4;word-break:keep-all}
   .party .seal{color:#555;font-size:9pt;white-space:nowrap}
-  .party .line{border-bottom:1px solid #000;min-height:1.4em;padding:0 1mm;font-weight:600;word-break:keep-all;overflow-wrap:anywhere}
+  .party .line{min-height:1.4em;font-weight:800;word-break:keep-all;overflow-wrap:anywhere}
 
   .pgno{position:absolute;right:18mm;bottom:7mm;font-size:8pt;color:#999}
 
@@ -119,7 +120,7 @@
   <!-- ═══════════ 입력 폼 ═══════════ -->
   <form class="panel" id="form" autocomplete="off" onsubmit="return false">
     <h2>근로계약서 생성기</h2>
-    <p class="desc">왼쪽을 채우면 오른쪽 계약서(근로계약서 + 비밀유지계약서)가 바로 완성됩니다. 비워둔 항목은 손으로 쓸 수 있게 빈 밑줄로 나옵니다. 입력 내용은 자동 저장됩니다.</p>
+    <p class="desc">왼쪽을 채우면 오른쪽 계약서(근로계약서 + 비밀유지계약서)가 바로 완성됩니다. 입력한 내용은 계약서에 굵은 글씨로 들어가고, 비워둔 항목은 손으로 쓸 수 있게 빈칸으로 남습니다. 입력 내용은 자동 저장됩니다.</p>
 
     <div class="grp">
       <h3>근로자 인적사항</h3>
@@ -374,7 +375,7 @@
       var k = el.dataset.k;
       if (k === 'signdate_full'){
         var s = o.signdate;
-        if (s){ var a = s.split('-'); el.textContent = a[0] + '년   ' + Number(a[1]) + '월   ' + Number(a[2]) + '일'; }
+        if (s){ var a = s.split('-'); el.innerHTML = '<b>' + a[0] + '</b>년   <b>' + Number(a[1]) + '</b>월   <b>' + Number(a[2]) + '</b>일'; }
         else el.innerHTML = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;년 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;월 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;일';
         el.style.whiteSpace = 'pre';
         return;
