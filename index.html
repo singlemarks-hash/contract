@@ -168,9 +168,8 @@
         <div class="fld"><label class="t">휴게 종료</label><input type="time" name="rto"></div>
       </div>
       <div class="fld"><label class="t">근무 요일</label><div class="chips" id="days"></div></div>
-      <div class="fld"><label class="t">주휴일</label>
-        <select name="holiday"><option value="">선택 안 함</option><option>월요일</option><option>화요일</option><option>수요일</option><option>목요일</option><option>금요일</option><option>토요일</option><option selected>일요일</option></select>
-      </div>
+      <div class="fld"><label class="t">주휴일 (여러 개 선택 가능)</label><div class="chips" id="hols"></div>
+        <div class="warn" id="holWarn">근무 요일과 주휴일이 겹칩니다.</div></div>
     </div>
 
     <!-- 파트타이머: 시급 -->
@@ -376,6 +375,12 @@
     l.innerHTML = '<input type="checkbox" name="day_' + d + '">' + d;
     daysBox.appendChild(l);
   });
+  var holBox = document.getElementById('hols');
+  DAYS.forEach(function(d){
+    var l = document.createElement('label');
+    l.innerHTML = '<input type="checkbox" name="hol_' + d + '"' + (d === '일' ? ' checked' : '') + '>' + d;
+    holBox.appendChild(l);
+  });
 
   /* ───── 유틸 ───── */
   function pad(n){ return String(n).padStart(2,'0'); }
@@ -490,6 +495,7 @@
     document.getElementById('payPrefix').textContent = isMonth ? '세전 ' : '';
 
     var days = DAYS.filter(function(d){ return o['day_' + d]; });
+    document.getElementById('holWarn').style.display = DAYS.some(function(d){ return o['day_' + d] && o['hol_' + d]; }) ? 'block' : 'none';
     var map = {
       name: o.name.trim(),
       rrn1: o.rrn1, rrn2: o.rrn2,
@@ -499,7 +505,7 @@
       job: o.job.trim(),
       wfrom: o.wfrom, wto: o.wto, rfrom: o.rfrom, rto: o.rto,
       days: days.join(', '),
-      holiday: o.holiday,
+      holiday: DAYS.filter(function(d){ return o['hol_' + d]; }).map(function(d){ return d + '요일'; }).join(', '),
       pay: isMonth ? money(m.pay) : money(digits(o.wage)),
       bank: o.bank.trim(), account: o.account.trim(),
       holder: (o.holder.trim() || (o.bank || o.account ? o.name.trim() : ''))
@@ -569,7 +575,12 @@
   var saved = null;
   try { saved = JSON.parse(localStorage.getItem(STORE) || 'null'); } catch(e){}
   if (!saved){ try { saved = JSON.parse(localStorage.getItem('singlemarks_contract_generator_v2') || 'null'); } catch(e){} }
-  if (saved) write(saved);
+  if (saved){
+    if (typeof saved.holiday === 'string' && !Object.keys(saved).some(function(k){ return k.indexOf('hol_') === 0; })){
+      DAYS.forEach(function(d){ saved['hol_' + d] = (saved.holiday === d + '요일'); });
+    }
+    write(saved);
+  }
   if (!form.elements.signdate.value) form.elements.signdate.value = today();
   render();
 })();
