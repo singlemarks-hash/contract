@@ -13,18 +13,20 @@
     -webkit-print-color-adjust:exact;print-color-adjust:exact;
   }
 
-  /* ───────── 화면 레이아웃: 왼쪽 폼 / 오른쪽 미리보기 ───────── */
+  /* ───────── 화면: 왼쪽 폼 / 오른쪽 미리보기 ───────── */
   .app{display:grid;grid-template-columns:400px 1fr;height:100vh}
   .panel{background:#fff;border-right:1px solid #d5d8dd;overflow-y:auto;padding:20px 22px 120px}
   .preview{overflow:auto;padding:24px 0}
 
   .panel h2{font-size:18px;margin:0 0 4px}
-  .panel .desc{font-size:12.5px;color:#666;margin:0 0 16px;line-height:1.5}
+  .panel .desc{font-size:12.5px;color:#666;margin:0 0 14px;line-height:1.5}
+  .typebox{background:#f3f6ff;border:1px solid #cfdcff;border-radius:10px;padding:12px 12px 4px;margin-bottom:6px}
+  .typebox select{font-weight:700;font-size:15px}
   .grp{border-top:1px solid #eee;padding:14px 0 6px}
   .grp h3{font-size:13px;color:#2b5fd9;margin:0 0 10px;letter-spacing:.02em}
   .fld{margin-bottom:10px}
   .fld label.t{display:block;font-size:12px;color:#444;margin-bottom:4px;font-weight:600}
-  .fld input[type=text],.fld input[type=tel],.fld input[type=date],.fld input[type=time],.fld input[type=number],.fld select,.fld textarea{
+  .fld input[type=text],.fld input[type=tel],.fld input[type=date],.fld input[type=time],.fld select,.fld textarea{
     width:100%;font:inherit;font-size:14px;padding:8px 10px;border:1px solid #cfd3da;border-radius:6px;background:#fff;outline:none;
   }
   .fld textarea{resize:vertical;min-height:40px;line-height:1.4}
@@ -39,10 +41,16 @@
     padding:6px 10px;border:1px solid #cfd3da;border-radius:16px;font-size:13px;cursor:pointer;user-select:none;
   }
   .chips input{display:none}
-  .chips input:checked+span{color:#fff}
   .chips label:has(input:checked){background:#2b5fd9;border-color:#2b5fd9;color:#fff}
+  .toggle{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;cursor:pointer;margin-bottom:8px}
+  .toggle input{width:16px;height:16px;accent-color:#2b5fd9}
+  .sub{padding-left:10px;border-left:3px solid #e4eaf7;margin:0 0 10px}
+  .calc{font-size:13px;background:#f6f7f9;border-radius:6px;padding:8px 10px;margin-top:2px}
+  .calc b{font-size:15px}
   .warn{font-size:12px;color:#c62828;margin-top:4px;display:none}
-  .note{font-size:11.5px;color:#888;margin-top:3px}
+  .note{font-size:11.5px;color:#888;margin-top:3px;line-height:1.45}
+  [data-only]{display:none}
+  body.t-part [data-only~="part"], body.t-month [data-only~="month"]{display:block}
 
   .actions{
     position:fixed;left:0;bottom:0;width:400px;background:#fff;border-top:1px solid #e1e4e8;
@@ -55,72 +63,81 @@
 
   /* ───────── A4 계약서 ───────── */
   .sheet{
-    width:210mm;height:297mm;margin:0 auto 20px;background:#fff;
-    padding:15mm 18mm 12mm;box-shadow:0 2px 10px rgba(0,0,0,.12);
-    font-size:10.3pt;line-height:1.6;position:relative;overflow:hidden;
+    width:210mm;min-height:297mm;margin:0 auto 20px;background:#fff;
+    padding:14mm 18mm 12mm;box-shadow:0 2px 10px rgba(0,0,0,.12);
+    font-size:10.3pt;line-height:1.6;position:relative;
   }
+  .over{position:absolute;top:4mm;right:6mm;font-size:11px;color:#b26a00;background:#fff4e0;border-radius:4px;padding:2px 6px;display:none}
   h1{text-align:center;font-size:19pt;letter-spacing:.14em;margin:0 0 7mm;font-weight:800}
   h1 small{display:block;font-size:9pt;letter-spacing:.3em;color:#555;font-weight:500;margin-top:2px}
   .sheet p{margin:0 0 2mm}
   .intro{margin-bottom:4mm !important}
 
-  /* 채워진 값: 밑줄 친 일반 텍스트 (길면 자연스럽게 줄바꿈) */
-  /* 사람마다 달라지는 입력값: 밑줄 없이 굵은 글씨 */
+  /* 사람마다 달라지는 입력값: 굵은 글씨 */
   .v{font-weight:800;padding:0 .8mm}
   .v:empty{display:inline-block;vertical-align:bottom;height:1.3em;min-width:var(--w,25mm)}
+  .art .v{padding:0}
+
+  ol.terms{margin:0;padding:0;list-style:none;counter-reset:n}
+  ol.terms>li{display:grid;grid-template-columns:8mm 29mm 1fr;margin:0 0 1.6mm;align-items:baseline}
+  ol.terms>li::before{counter-increment:n;content:counter(n) ".";font-weight:700}
+  ol.terms .label{font-weight:700;white-space:nowrap}
+  ol.terms .body .sub2{display:block;margin-top:.5mm}
+
   .cb{display:inline-block;width:3.4mm;height:3.4mm;border:1px solid #000;position:relative;vertical-align:-0.4mm;margin-right:1mm}
   .cb.on::after{content:'';position:absolute;left:1mm;top:0;width:1.1mm;height:2.2mm;border:solid #000;border-width:0 .45mm .45mm 0;transform:rotate(45deg)}
 
-  ol.terms{margin:0;padding:0;list-style:none;counter-reset:n}
-  ol.terms>li{display:grid;grid-template-columns:8mm 29mm 1fr;margin:0 0 1.8mm;align-items:baseline}
-  ol.terms>li::before{counter-increment:n;content:counter(n) ".";font-weight:700}
-  ol.terms .label{font-weight:700;white-space:nowrap}
-  ol.terms .body .sub{display:block;margin-top:.6mm}
-
   .articles{margin-top:3mm;border-top:1px solid #999;padding-top:2.5mm}
-  .art{margin:0 0 2mm !important;text-align:justify;font-size:9.5pt;line-height:1.5}
-  .art b{margin-right:4px}
+  .art{orphans:3;widows:3;margin:0 0 1.8mm !important;text-align:justify;font-size:var(--art,9.5pt);line-height:1.5}
+  .art b.h{margin-right:4px}
 
   .nda .art{font-size:10pt;line-height:1.6;margin-bottom:3mm !important}
-  .nda .art b{display:block;margin-bottom:.8mm}
+  .nda .art b.h{display:block;margin-bottom:.8mm}
   .nda .art .c{display:block;padding-left:4mm;text-indent:-4mm}
 
+  .signblock{break-inside:avoid;page-break-inside:avoid}
   .ack{margin-top:4mm}
-  .ack p{text-align:center;color:#b8b8b8;font-size:10.5pt;letter-spacing:.02em;margin-bottom:4mm !important;white-space:nowrap}
+  .ack p{text-align:center;color:#b8b8b8;font-size:10.5pt;letter-spacing:.02em;margin-bottom:3.5mm !important;white-space:nowrap}
   .ack .sig{margin-left:10mm;font-size:9pt}
-
-  .dateline{text-align:center;margin:4mm 0 4mm !important;font-size:11pt;letter-spacing:.06em}
+  .dateline{text-align:center;margin:4mm 0 4mm !important;font-size:11pt;letter-spacing:.06em;white-space:pre}
 
   .parties{display:grid;grid-template-columns:1fr 1fr;gap:10mm}
   .party h3{margin:0 0 2mm;font-size:10.5pt}
-  .party .r{display:grid;grid-template-columns:19mm 1fr auto;column-gap:2mm;margin-bottom:1.8mm;align-items:baseline}
+  .party .r{display:grid;grid-template-columns:19mm 1fr auto;column-gap:2mm;margin-bottom:1.6mm;align-items:baseline}
   .party .k{font-weight:700;white-space:nowrap}
   .party .wide{grid-column:2 / 4;word-break:keep-all}
   .party .seal{color:#555;font-size:9pt;white-space:nowrap}
   .party .line{min-height:1.4em;font-weight:800;word-break:keep-all;overflow-wrap:anywhere}
 
-  .pgno{position:absolute;right:18mm;bottom:7mm;font-size:8pt;color:#999}
-
   /* ───────── 인쇄 ───────── */
-  @page{size:A4;margin:0}
+  @page{size:A4;margin:14mm 18mm 12mm}
   @media print{
     html,body{background:#fff;height:auto}
-    #nojs,.panel,.actions{display:none !important}
+    #nojs,.panel,.actions,.over{display:none !important}
     .app{display:block;height:auto}
     .preview{overflow:visible;padding:0}
-    .sheet{margin:0;box-shadow:none;height:296.5mm;break-after:page;page-break-after:always}
+    .sheet{width:auto;min-height:0;margin:0;padding:0;box-shadow:none;break-after:page;page-break-after:always}
     .sheet:last-of-type{break-after:auto;page-break-after:auto}
   }
 </style>
 </head>
-<body>
-<div id="nojs">이 화면에서는 생성기가 동작하지 않습니다. 파일을 크롬 브라우저에서 직접 열어주세요 (파일 더블클릭 또는 크롬 창으로 드래그).</div>
+<body class="t-part">
+<div id="nojs">이 화면에서는 생성기가 동작하지 않습니다. 크롬 브라우저에서 직접 열어주세요.</div>
 
 <div class="app">
   <!-- ═══════════ 입력 폼 ═══════════ -->
   <form class="panel" id="form" autocomplete="off" onsubmit="return false">
     <h2>근로계약서 생성기</h2>
-    <p class="desc">왼쪽을 채우면 오른쪽 계약서(근로계약서 + 비밀유지계약서)가 바로 완성됩니다. 입력한 내용은 계약서에 굵은 글씨로 들어가고, 비워둔 항목은 손으로 쓸 수 있게 빈칸으로 남습니다. 입력 내용은 자동 저장됩니다.</p>
+    <p class="desc">왼쪽을 채우면 오른쪽 계약서(근로계약서 + 비밀유지계약서)가 바로 완성됩니다. 입력한 내용은 굵은 글씨로 들어가고, 비워둔 항목은 손으로 쓸 수 있게 빈칸으로 남습니다.</p>
+
+    <div class="typebox">
+      <div class="fld"><label class="t">계약서 종류</label>
+        <select name="ctype">
+          <option value="part">파트타이머 (시급제)</option>
+          <option value="month">월급제</option>
+        </select>
+      </div>
+    </div>
 
     <div class="grp">
       <h3>근로자 인적사항</h3>
@@ -138,7 +155,7 @@
         <div class="fld"><label class="t">계약 시작일</label><input type="date" name="start"></div>
         <div class="fld"><label class="t">계약 종료일</label><input type="date" name="end"></div>
       </div>
-      <div class="fld"><label class="t">업무 내용</label><input type="text" name="job" placeholder="예) 홀 서빙 및 매장 운영 보조"></div>
+      <div class="fld"><label class="t">업무 내용</label><input type="text" name="job" placeholder="예) 홀&amp;바 전반적인 모든 업무"></div>
       <div class="row2">
         <div class="fld"><label class="t">근무 시작</label><input type="time" name="wfrom"></div>
         <div class="fld"><label class="t">근무 종료</label><input type="time" name="wto"></div>
@@ -147,14 +164,57 @@
         <div class="fld"><label class="t">휴게 시작</label><input type="time" name="rfrom"></div>
         <div class="fld"><label class="t">휴게 종료</label><input type="time" name="rto"></div>
       </div>
-      <div class="fld"><label class="t">근무 요일</label>
-        <div class="chips" id="days"></div>
-      </div>
+      <div class="fld"><label class="t">근무 요일</label><div class="chips" id="days"></div></div>
       <div class="fld"><label class="t">주휴일</label>
         <select name="holiday"><option value="">선택 안 함</option><option>월요일</option><option>화요일</option><option>수요일</option><option>목요일</option><option>금요일</option><option>토요일</option><option selected>일요일</option></select>
       </div>
+    </div>
+
+    <!-- 파트타이머: 시급 -->
+    <div class="grp" data-only="part">
+      <h3>임금 (시급제)</h3>
       <div class="fld"><label class="t">시급 (원)</label><input type="text" name="wage" inputmode="numeric" placeholder="10,320">
         <div class="warn" id="wageWarn">2026년 최저시급(10,320원)보다 낮습니다.</div>
+      </div>
+    </div>
+
+    <!-- 월급제 -->
+    <div class="grp" data-only="month">
+      <h3>임금 (월급제)</h3>
+      <div class="row2">
+        <div class="fld"><label class="t">기준 시급 (원)</label><input type="text" name="mrate" inputmode="numeric" value="10,320"></div>
+        <div class="fld"><label class="t">월 소정근로시간</label><input type="text" name="mhours" inputmode="numeric" value="209"></div>
+      </div>
+      <div class="calc">월 기본급(세전) = 기준 시급 × 월 소정근로시간 = <b id="mpayView">0원</b></div>
+      <div class="warn" id="mrateWarn">기준 시급이 2026년 최저시급(10,320원)보다 낮습니다.</div>
+      <div class="note">기준 시급이 10,320원이면 계약서에 "2026년 최저시급 10,320원"으로 표기됩니다.</div>
+    </div>
+
+    <div class="grp" data-only="month">
+      <h3>월급제 특약</h3>
+      <label class="toggle"><input type="checkbox" name="short_on">초단시간 근로기간 있음 (월급제 전환 전)</label>
+      <div class="sub" id="shortBox">
+        <div class="row2">
+          <div class="fld"><label class="t">초단시간 시작일</label><input type="date" name="short_s"></div>
+          <div class="fld"><label class="t">초단시간 종료일</label><input type="date" name="short_e"></div>
+        </div>
+        <div class="note">종료일 다음 날부터 월급제가 적용되고, 그날이 사회보험 취득일로 들어갑니다.</div>
+      </div>
+      <div class="fld" id="insDateBox"><label class="t">사회보험 취득일</label><input type="date" name="ins_date">
+        <div class="note">비워두면 계약 시작일로 들어갑니다.</div>
+      </div>
+
+      <label class="toggle" style="margin-top:6px"><input type="checkbox" name="prob_on" checked>수습기간 적용</label>
+      <div class="sub" id="probBox">
+        <div class="row2">
+          <div class="fld"><label class="t">수습 시작일</label><input type="date" name="prob_s"></div>
+          <div class="fld"><label class="t">수습 종료일</label><input type="date" name="prob_e"></div>
+        </div>
+        <div class="note">비워두면 계약 시작일부터 1개월로 들어갑니다.</div>
+      </div>
+
+      <div class="fld"><label class="t">필수가 아닌 추가 업무 (선택)</label><input type="text" name="extra_job" placeholder="예) 공연 기획 및 행정 업무">
+        <div class="note">적으면 제○조 업무에 "OO는 필수 담당업무가 아니며 별도로 부여될 수 있다"는 문장이 들어갑니다.</div>
       </div>
     </div>
 
@@ -188,9 +248,10 @@
   <!-- ═══════════ 계약서 미리보기 (인쇄 대상) ═══════════ -->
   <main class="preview">
 
-    <!-- 1장: 근로계약서 -->
-    <section class="sheet">
-      <h1>계약직 근로계약서<small>(파트타이머)</small></h1>
+    <!-- 근로계약서 -->
+    <section class="sheet" id="contract">
+      <span class="over" id="overBadge">근로계약서는 2장으로 인쇄됩니다 (서명란은 2장째)</span>
+      <h1>계약직 근로계약서<small id="ctypeLabel">(파트타이머)</small></h1>
 
       <p class="intro">
         작은따옴표(이하 “사업주”라 함)과(와) <span class="v" data-k="name" style="--w:28mm"></span>(이하 “근로자”라 함)은 다음과 같이 근로계약을 체결한다.<br>
@@ -203,9 +264,9 @@
         <li><span class="label">업무의 내용</span><span class="body"><span class="v" data-k="job" style="--w:80mm"></span></span></li>
         <li><span class="label">소정근로시간</span><span class="body"><span class="v" data-k="wfrom" style="--w:16mm"></span> ~ <span class="v" data-k="wto" style="--w:16mm"></span> &nbsp;/&nbsp; 휴게시간 <span class="v" data-k="rfrom" style="--w:16mm"></span> ~ <span class="v" data-k="rto" style="--w:16mm"></span></span></li>
         <li><span class="label">근무일/휴일</span><span class="body">매주 <span class="v" data-k="days" style="--w:35mm"></span> 근무 &nbsp;&nbsp; 주휴일 <span class="v" data-k="holiday" style="--w:18mm"></span></span></li>
-        <li><span class="label">시 급</span><span class="body"><span class="v" data-k="wage" style="--w:25mm"></span>원
-          <span class="sub">- 임금지급일 : 10일 &nbsp;&nbsp; - 지급방법 : 근로자 명의 예금통장에 입금</span>
-          <span class="sub">- 계좌번호 : <span class="v" data-k="bank" style="--w:18mm"></span> / <span class="v" data-k="account" style="--w:40mm"></span> / <span class="v" data-k="holder" style="--w:18mm"></span></span>
+        <li><span class="label" id="payLabel">시 급</span><span class="body"><span id="payPrefix"></span><span class="v" data-k="pay" style="--w:25mm"></span>원
+          <span class="sub2">- 임금지급일 : 10일 &nbsp;&nbsp; - 지급방법 : 근로자 명의 예금통장에 입금</span>
+          <span class="sub2">- 계좌번호 : <span class="v" data-k="bank" style="--w:18mm"></span> / <span class="v" data-k="account" style="--w:40mm"></span> / <span class="v" data-k="holder" style="--w:18mm"></span></span>
         </span></li>
         <li><span class="label">연월차유급휴가</span><span class="body">연월차유급휴가는 근로기준법에서 정하는 바에 따라 부여함</span></li>
         <li><span class="label">사회보험 적용</span><span class="body">
@@ -216,81 +277,74 @@
         </span></li>
       </ol>
 
-      <div class="articles">
-        <p class="art"><b>제 1조 임금 산정 :</b>근로자의 급여는 시급으로 산정한다. 야간근로수당은 실제 야간근로시간에 따라 매월 별도로 산정하여 지급한다. 야간근로수당은 22:00부터 06:00 사이의 실제 근로시간에 대하여 통상시급의 50%를 가산하여 지급한다. 휴일근로수당은 실제 발생한 시간에 따라 관계 법령에 따라 별도로 산정하여 지급한다.</p>
-        <p class="art"><b>제 2조 업무 :</b>근로자는 회사가 정한 담당업무를 수행하며, 구체적인 업무 내용은 근로계약서 및 회사의 업무 지시에 따른다. 업무는 근로자의 업무역량, 숙련도, 근무태도 및 회사의 운영상황에 따라 변경될 수 있다. 회사는 매장 운영상 필요하거나 근로자의 업무 적합성 및 역량을 고려하여 담당업무의 세부 내용을 조정할 수 있다.</p>
-        <p class="art"><b>제 3조 계약 종료 :</b>다음 내용에 하나라도 해당 될 경우 계약을 바로 종료 할 수 있다. *계약 기간 만료 *사업주가 정한 조직문화, 근로계약, 취업규칙, 단체협약을 근로자가 지키지 않았을 시 *근로자의 근무태만(무단결근/직원&amp;손님과의 충돌/물리적&amp;언어적 폭력/협의된 사항에 대해 반복적인 변경 요청) *근로자가 지속적으로 업무 능력 부족 또는 직무 수행에 현저한 부적합성이 있다고 판단될 경우 *근로자가 심각한 건강 문제로 인해 장기적으로 업무 수행이 불가능한 경우.</p>
-        <p class="art"><b>제 4조 계약서 :</b>사업주는 근로계약을 체결함과 동시에 본 계약서를 사본하여 근로자의 교부요구와 관계없이 근로자에게 교부한다.(근로기준법 제17조 이행) 해당 날짜 이전의 모든 근로계약은 파기. 계약 기간 만료 후 합의에 의해 연장 가능하다.</p>
-        <p class="art"><b>제 5조 계약 정보 :</b>근로자는 연봉 및 성과급(개인별 업무성과급 및 인센티브)등 제반 보상내용에 대해 타인에게 공개할 수 없으며 타인의 연봉 및 성과급에 대해서도 알려고 하지 않는다.</p>
-      </div>
+      <div class="articles" id="articles"></div>
 
-      <div class="ack">
-        <p>(계약서를 교부 받았습니다)<span class="sig">(근로자 서명)</span></p>
-        <p>(사업장 여건&amp;필요에 따라 휴게시간이 변경될 수 있음을 동의합니다)<span class="sig">(근로자 서명)</span></p>
-      </div>
-
-      <p class="dateline" data-k="signdate_full"></p>
-
-      <div class="parties">
-        <div class="party">
-          <h3>(사업주)</h3>
-          <div class="r"><span class="k">주 &nbsp;&nbsp; 소 :</span><span class="wide">서울시 관악구 관천로 36-1, 2층 작은따옴표</span></div>
-          <div class="r"><span class="k">회 사 명 :</span><span class="wide">작은따옴표</span></div>
-          <div class="r"><span class="k">대 표 자 :</span><span>장서영</span><span class="seal">(서명)</span></div>
+      <div class="signblock">
+        <div class="ack">
+          <p>(계약서를 교부 받았습니다)<span class="sig">(근로자 서명)</span></p>
+          <p>(사업장 여건&amp;필요에 따라 휴게시간이 변경될 수 있음을 동의합니다)<span class="sig">(근로자 서명)</span></p>
         </div>
-        <div class="party">
-          <h3>(근로자)</h3>
-          <div class="r"><span class="k">주 &nbsp;&nbsp; 소 :</span><span class="line wide" data-k="addr"></span></div>
-          <div class="r"><span class="k">연 락 처 :</span><span class="line wide" data-k="phone"></span></div>
-          <div class="r"><span class="k">이 &nbsp;&nbsp; 름 :</span><span class="line" data-k="name"></span><span class="seal">(서명)</span></div>
+        <p class="dateline" data-k="signdate_full"></p>
+        <div class="parties">
+          <div class="party">
+            <h3>(사업주)</h3>
+            <div class="r"><span class="k">주 &nbsp;&nbsp; 소 :</span><span class="wide">서울시 관악구 관천로 36-1, 2층 작은따옴표</span></div>
+            <div class="r"><span class="k">회 사 명 :</span><span class="wide">작은따옴표</span></div>
+            <div class="r"><span class="k">대 표 자 :</span><span>장서영</span><span class="seal">(서명)</span></div>
+          </div>
+          <div class="party">
+            <h3>(근로자)</h3>
+            <div class="r"><span class="k">주 &nbsp;&nbsp; 소 :</span><span class="line wide" data-k="addr"></span></div>
+            <div class="r"><span class="k">연 락 처 :</span><span class="line wide" data-k="phone"></span></div>
+            <div class="r"><span class="k">이 &nbsp;&nbsp; 름 :</span><span class="line" data-k="name"></span><span class="seal">(서명)</span></div>
+          </div>
         </div>
       </div>
-      <div class="pgno">1 / 2</div>
     </section>
 
-    <!-- 2장: 비밀유지계약서 -->
+    <!-- 비밀유지계약서 -->
     <section class="sheet nda">
       <h1>비밀유지 계약서<small>(NDA)</small></h1>
 
       <p class="intro">작은따옴표 (이하 “갑”이라 한다)와 <span class="v" data-k="name" style="--w:28mm"></span> (이하 “을”이라 한다)는 아래와 같이 비밀유지 계약을 체결한다.</p>
 
-      <p class="art"><b>제 1 조 【 목 적 】</b>본 계약서는 “갑”과 “을”이 체결한 근로계약서에 따라 “을”이 근무하고 있는 사업장 “갑” 내에서 발생하는 모든 정보나 자료를 열람하는데 있어서 준수하여야 할 비밀유지 조건을 숙지 및 협의하였음을 확인하기 위한 계약서이다.</p>
-      <p class="art"><b>제 2 조 【 정보 및 적용 범위 】</b>
+      <p class="art"><b class="h">제 1 조 【 목 적 】</b>본 계약서는 “갑”과 “을”이 체결한 근로계약서에 따라 “을”이 근무하고 있는 사업장 “갑” 내에서 발생하는 모든 정보나 자료를 열람하는데 있어서 준수하여야 할 비밀유지 조건을 숙지 및 협의하였음을 확인하기 위한 계약서이다.</p>
+      <p class="art"><b class="h">제 2 조 【 정보 및 적용 범위 】</b>
         <span class="c">① “갑”에서 발생되는 모든 자료와 정보 일체에 해당된다.</span>
         <span class="c">② 해당 비밀유지사항은 “을”이 입사한 날로부터 퇴사한 후에도 적용됨을 상호 합의한다.</span></p>
-      <p class="art"><b>제 3 조 【 정보제한 】</b>
+      <p class="art"><b class="h">제 3 조 【 정보제한 】</b>
         <span class="c">① “갑”에서 제공한 모든 정보나 자료는 “을”이 자신의 업무 목적에만 사용하여야 한다.</span>
         <span class="c">② “을”은 제2조 1항에 해당되는 모든 사항을 유출해서는 아니된다.</span>
         <span class="c">③ “을”은 제2조 1항에 해당되는 모든 사항을 사업장 외부로 제공될 필요가 있을 때 반드시 업무목적으로만 한정해야 한다.</span>
         <span class="c">④ “갑”의 서면동의 없이 “을”은 “갑”과 관련된 모든 사항을 비밀유지할 의무를 가진다.</span></p>
-      <p class="art"><b>제 4 조 【 불가피한 정보 유출의 경우 】</b>
+      <p class="art"><b class="h">제 4 조 【 불가피한 정보 유출의 경우 】</b>
         <span class="c">① “을”이 부득이하게 사법권과 행정권에 관한 조회 등으로 인하여 강제적으로 본 계약에 관한 정보나 자료 등을 타인에게 제공하여야 하는 경우 반드시 해당내용을 그때로 즉시 “갑”에게 그 사실을 통보하여야 한다.</span>
         <span class="c">② 제4조 1항이 발생되는 경우 “갑”은 “을”이 적절한 보호 또는 대응 조치를 할 수 있도록 지원한다.</span>
         <span class="c">③ 제4조 1항이 즉각 조치명령이라면 “을”은 타인에게 최소한의 정보와 자료가 제공되도록 최선을 다한다.</span></p>
-      <p class="art"><b>제 5 조 【 정보의 회수 및 비밀유지 】</b>
+      <p class="art"><b class="h">제 5 조 【 정보의 회수 및 비밀유지 】</b>
         <span class="c">① 만일, “갑”과 “을”의 근로계약이 만기 및 종료 해지 될 경우 “을”이 수령, 제작, 배포한 자료와 정보 일체를 사본으로 남기지 않고 모두 “갑”에게 반환 및 귀속할 의무를 가지며, 이를 “갑”에게 서면으로 확인하여야 한다.</span>
         <span class="c">② “을”은 제2조 2항에 의거 “갑”과 관련된 모든 자료나 정보를 기억에 의하여 재작성하거나 발설하지 아니하여야 한다.</span></p>
-      <p class="art"><b>제 6 조 【 손해배상 】</b>“을”이 위 사항을 위반하여 “갑”에게 손해를 끼친 경우는 그 손해배상 금액은 유출로 인한 직접적 손실뿐만 아니라, 기타 간접적 손실을 포함할 수 있다.</p>
+      <p class="art"><b class="h">제 6 조 【 손해배상 】</b>“을”이 위 사항을 위반하여 “갑”에게 손해를 끼친 경우는 그 손해배상 금액은 유출로 인한 직접적 손실뿐만 아니라, 기타 간접적 손실을 포함할 수 있다.</p>
 
       <p class="art" style="margin-top:6mm !important">위와 같이 계약을 체결하고 계약서 2통을 작성, 서명 날인 후 “갑”과 “을”이 각각 1통씩 보관한다.</p>
 
-      <p class="dateline" data-k="signdate_full"></p>
-
-      <div class="parties">
-        <div class="party">
-          <h3>(갑)</h3>
-          <div class="r"><span class="k">주 &nbsp;&nbsp; 소 :</span><span class="wide">서울시 관악구 관천로 36-1, 2층 작은따옴표</span></div>
-          <div class="r"><span class="k">회 사 명 :</span><span class="wide">작은따옴표</span></div>
-          <div class="r"><span class="k">대 표 자 :</span><span>장서영</span><span class="seal">(서명)</span></div>
-        </div>
-        <div class="party">
-          <h3>(을)</h3>
-          <div class="r"><span class="k">주 &nbsp;&nbsp; 소 :</span><span class="line wide" data-k="addr"></span></div>
-          <div class="r"><span class="k">연 락 처 :</span><span class="line wide" data-k="phone"></span></div>
-          <div class="r"><span class="k">이 &nbsp;&nbsp; 름 :</span><span class="line" data-k="name"></span><span class="seal">(서명)</span></div>
+      <div class="signblock">
+        <p class="dateline" data-k="signdate_full"></p>
+        <div class="parties">
+          <div class="party">
+            <h3>(갑)</h3>
+            <div class="r"><span class="k">주 &nbsp;&nbsp; 소 :</span><span class="wide">서울시 관악구 관천로 36-1, 2층 작은따옴표</span></div>
+            <div class="r"><span class="k">회 사 명 :</span><span class="wide">작은따옴표</span></div>
+            <div class="r"><span class="k">대 표 자 :</span><span>장서영</span><span class="seal">(서명)</span></div>
+          </div>
+          <div class="party">
+            <h3>(을)</h3>
+            <div class="r"><span class="k">주 &nbsp;&nbsp; 소 :</span><span class="line wide" data-k="addr"></span></div>
+            <div class="r"><span class="k">연 락 처 :</span><span class="line wide" data-k="phone"></span></div>
+            <div class="r"><span class="k">이 &nbsp;&nbsp; 름 :</span><span class="line" data-k="name"></span><span class="seal">(서명)</span></div>
+          </div>
         </div>
       </div>
-      <div class="pgno">2 / 2</div>
     </section>
   </main>
 </div>
@@ -304,11 +358,11 @@
 (function(){
   document.getElementById('nojs').style.display = 'none';
 
-  var STORE = 'singlemarks_contract_generator_v2';
+  var STORE = 'singlemarks_contract_generator_v3';
+  var MINWAGE = 10320;
   var form = document.getElementById('form');
   var DAYS = ['월','화','수','목','금','토','일'];
 
-  // 근무 요일 칩 생성
   var daysBox = document.getElementById('days');
   DAYS.forEach(function(d){
     var l = document.createElement('label');
@@ -316,16 +370,17 @@
     daysBox.appendChild(l);
   });
 
-  function today(){
-    var t = new Date(), p = function(n){ return String(n).padStart(2,'0'); };
-    return t.getFullYear() + '-' + p(t.getMonth()+1) + '-' + p(t.getDate());
-  }
-  function fmtDate(s){
-    if (!s) return '';
-    var a = s.split('-');
-    return a[0] + '년 ' + Number(a[1]) + '월 ' + Number(a[2]) + '일';
-  }
+  /* ───── 유틸 ───── */
+  function pad(n){ return String(n).padStart(2,'0'); }
+  function iso(d){ return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate()); }
+  function parse(s){ if (!s) return null; var a = s.split('-'); return new Date(+a[0], +a[1]-1, +a[2]); }
+  function today(){ return iso(new Date()); }
+  function addDays(s, n){ var d = parse(s); if (!d) return ''; d.setDate(d.getDate()+n); return iso(d); }
+  function addMonths(s, n){ var d = parse(s); if (!d) return ''; var day = d.getDate(); d.setDate(1); d.setMonth(d.getMonth()+n);
+    var last = new Date(d.getFullYear(), d.getMonth()+1, 0).getDate(); d.setDate(Math.min(day, last)); return iso(d); }
+  function fmtDate(s){ if (!s) return ''; var a = s.split('-'); return a[0] + '년 ' + Number(a[1]) + '월 ' + Number(a[2]) + '일'; }
   function digits(s){ return (s || '').replace(/\D/g,''); }
+  function money(n){ return n ? Number(n).toLocaleString('ko-KR') : ''; }
   function fmtPhone(s){
     var d = digits(s).slice(0, 11);
     if (d.length < 4) return d;
@@ -337,7 +392,15 @@
     if (d.length <= 7) return d.slice(0,3) + '-' + d.slice(3);
     return d.slice(0,3) + '-' + d.slice(3, d.length-4) + '-' + d.slice(-4);
   }
-  function fmtWage(s){ var d = digits(s); return d ? Number(d).toLocaleString('ko-KR') : ''; }
+  function esc(s){ return String(s == null ? '' : s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  // 입력값(굵게). 비어 있으면 손글씨용 빈칸
+  function V(s, w){ return s ? '<b class="v">' + esc(s) + '</b>' : '<span class="v" style="--w:' + (w || 25) + 'mm"></span>'; }
+  // 받침 유무에 따른 조사 (은/는, 을/를)
+  function josa(word, a, b){
+    var c = (word || '').trim().slice(-1).charCodeAt(0);
+    if (c >= 0xAC00 && c <= 0xD7A3) return ((c - 0xAC00) % 28) ? a : b;
+    return a + '(' + b + ')';
+  }
 
   function read(){
     var o = {};
@@ -354,8 +417,71 @@
     });
   }
 
+  /* ───── 조항 ───── */
+  var A_NIGHT = '야간근로수당은 실제 야간근로시간에 따라 매월 별도로 산정하여 지급한다. 야간근로수당은 22:00부터 06:00 사이의 실제 근로시간에 대하여 통상시급의 50%를 가산하여 지급한다. 휴일근로수당은 실제 발생한 시간에 따라 관계 법령에 따라 별도로 산정하여 지급한다.';
+  var A_END = '다음 내용에 하나라도 해당 될 경우 계약을 바로 종료 할 수 있다. *계약 기간 만료 *사업주가 정한 조직문화, 근로계약, 취업규칙, 단체협약을 근로자가 지키지 않았을 시 *근로자의 근무태만(무단결근/직원&amp;손님과의 충돌/물리적&amp;언어적 폭력/협의된 사항에 대해 반복적인 변경 요청) *근로자가 지속적으로 업무 능력 부족 또는 직무 수행에 현저한 부적합성이 있다고 판단될 경우 *근로자가 심각한 건강 문제로 인해 장기적으로 업무 수행이 불가능한 경우.';
+  var A_DOC = '사업주는 근로계약을 체결함과 동시에 본 계약서를 사본하여 근로자의 교부요구와 관계없이 근로자에게 교부한다.(근로기준법 제17조 이행) 해당 날짜 이전의 모든 근로계약은 파기. 계약 기간 만료 후 합의에 의해 연장 가능하다.';
+  var A_INFO = '근로자는 연봉 및 성과급(개인별 업무성과급 및 인센티브)등 제반 보상내용에 대해 타인에게 공개할 수 없으며 타인의 연봉 및 성과급에 대해서도 알려고 하지 않는다.';
+  var A_WORK_BASE = '근로자는 회사가 정한 담당업무를 수행하며, 구체적인 업무 내용은 근로계약서 및 회사의 업무 지시에 따른다.';
+  var A_WORK_ADJ = '회사는 매장 운영상 필요하거나 근로자의 업무 적합성 및 역량을 고려하여 담당업무의 세부 내용을 조정할 수 있다.';
+
+  function articles(o, m){
+    var list = [];
+    if (o.ctype === 'part'){
+      list.push(['임금 산정', '근로자의 급여는 시급으로 산정한다. ' + A_NIGHT]);
+      list.push(['업무', A_WORK_BASE + ' 업무는 근로자의 업무역량, 숙련도, 근무태도 및 회사의 운영상황에 따라 변경될 수 있다. ' + A_WORK_ADJ]);
+    } else {
+      var rateTxt = (m.rate === MINWAGE ? '2026년 최저시급 ' : '시급 ') + V(m.rate ? money(m.rate) + '원' : '');
+      list.push(['임금 산정', '근로자의 월 기본급은 금 ' + V(m.pay ? money(m.pay) + '원' : '') + '으로 한다. 이는 ' + rateTxt + '과 월 소정근로시간 ' + V(m.hours ? m.hours + '시간' : '', 15) + '을 기준으로 산정한 금액이다. ' + A_NIGHT]);
+      if (o.short_on){
+        list.push(['임금 특약', '본 계약은 월급제 근로계약을 원칙으로 한다. 다만, ' + V(fmtDate(o.short_s), 30) + '부터 ' + V(fmtDate(o.short_e), 30) + '까지는 4주 평균 1주 소정근로시간이 15시간 미만인 초단시간 근로기간으로 하며, 해당 기간의 임금은 실제 근로시간에 ' + V(money(m.rate)) + '을 곱하여 계산한다. ' + V(fmtDate(m.monthFrom), 30) + '부터는 월급제 임금을 적용하며, 월 급여는 금 ' + V(m.pay ? money(m.pay) + '원' : '') + '으로 한다.']);
+        list.push(['사회보험', V(fmtDate(o.short_s), 30) + '부터 ' + V(fmtDate(o.short_e), 30) + '까지는 4주 평균 1주 소정근로시간이 15시간 미만인 초단시간 근로기간으로 하며, 해당 기간에는 관련 법령에 따라 산재보험이 적용된다. ' + V(fmtDate(m.monthFrom), 30) + '부터는 정기적인 근로 제공이 예정되어 있으므로, 회사는 ' + V(fmtDate(m.insDate), 30) + '을 취득일로 하여 국민연금, 건강보험, 고용보험 등 관계 법령상 적용되는 사회보험 가입 절차를 진행한다.']);
+      } else {
+        list.push(['사회보험', '회사는 ' + V(fmtDate(m.insDate), 30) + '을 취득일로 하여 국민연금, 건강보험, 고용보험, 산재보험 등 관계 법령상 적용되는 사회보험 가입 절차를 진행한다.']);
+      }
+      if (o.prob_on){
+        list.push(['수습기간 및 수습평가', '근로자의 수습기간은 ' + V(fmtDate(m.probS), 30) + '부터 ' + V(fmtDate(m.probE), 30) + '까지로 한다. 회사는 수습기간 동안 근로자의 근태, 업무 습득도, 고객 응대, 메뉴 설명 능력, 서비스 기준 준수, 위생관리, 동료와의 협업, 매장 운영 적합성 등을 종합적으로 평가한다. 회사는 수습기간 중 또는 수습기간 종료 시 평가 결과에 따라 근로자의 계속 근무 여부를 결정할 수 있다. 평가 결과 계속 근무가 어렵다고 판단되는 경우, 회사는 관련 법령에 따라 근로계약 종료 또는 본채용 거부를 서면으로 통지할 수 있다. 근로자의 수습평가는 위 평가항목에 따라 진행되며, 회사는 수습기간 종료 시 계속 근무 여부와 관계없이, 수습기간 동안의 근무태도 및 업무역량에 대한 평가 결과를 근로자에게 안내할 수 있다.']);
+      }
+      var extra = (o.extra_job || '').trim();
+      var work = A_WORK_BASE + ' ' + (extra
+        ? V(extra) + josa(extra, '은', '는') + ' 필수 담당업무가 아니며, 근로자의 업무역량, 숙련도, 근무태도 및 회사의 운영상황에 따라 별도로 부여될 수 있다. '
+        : '업무는 근로자의 업무역량, 숙련도, 근무태도 및 회사의 운영상황에 따라 변경될 수 있다. ') + A_WORK_ADJ;
+      list.push(['업무', work]);
+    }
+    list.push(['계약 종료', A_END]);
+    list.push(['계약서', A_DOC]);
+    list.push(['계약 정보', A_INFO]);
+    return list.map(function(a, i){ return '<p class="art"><b class="h">제 ' + (i+1) + '조 ' + a[0] + ' :</b>' + a[1] + '</p>'; }).join('');
+  }
+
+  /* ───── 렌더 ───── */
   function render(){
     var o = read();
+    var isMonth = o.ctype === 'month';
+    document.body.className = isMonth ? 't-month' : 't-part';
+    document.getElementById('shortBox').style.display = o.short_on ? 'block' : 'none';
+    document.getElementById('insDateBox').style.display = o.short_on ? 'none' : 'block';
+    document.getElementById('probBox').style.display = o.prob_on ? 'block' : 'none';
+
+    // 월급 계산
+    var m = {};
+    m.rate = Number(digits(o.mrate)) || 0;
+    m.hours = Number(digits(o.mhours)) || 0;
+    m.pay = m.rate * m.hours;
+    m.monthFrom = o.short_on ? addDays(o.short_e, 1) : '';
+    m.insDate = o.short_on ? m.monthFrom : (o.ins_date || o.start);
+    m.probS = o.prob_s || o.start;
+    m.probE = o.prob_e || (o.start ? addMonths(o.start, 1) : '');
+    document.getElementById('mpayView').textContent = money(m.pay) + '원';
+    document.getElementById('mrateWarn').style.display = (m.rate && m.rate < MINWAGE) ? 'block' : 'none';
+    form.elements.prob_s.placeholder = '';
+    var w = Number(digits(o.wage));
+    document.getElementById('wageWarn').style.display = (w && w < MINWAGE) ? 'block' : 'none';
+
+    document.getElementById('ctypeLabel').textContent = isMonth ? '(월급)' : '(파트타이머)';
+    document.getElementById('payLabel').textContent = isMonth ? '월 급' : '시 급';
+    document.getElementById('payPrefix').textContent = isMonth ? '세전 ' : '';
+
     var days = DAYS.filter(function(d){ return o['day_' + d]; });
     var map = {
       name: o.name.trim(),
@@ -367,7 +493,7 @@
       wfrom: o.wfrom, wto: o.wto, rfrom: o.rfrom, rto: o.rto,
       days: days.join(', '),
       holiday: o.holiday,
-      wage: fmtWage(o.wage),
+      pay: isMonth ? money(m.pay) : money(digits(o.wage)),
       bank: o.bank.trim(), account: o.account.trim(),
       holder: (o.holder.trim() || (o.bank || o.account ? o.name.trim() : ''))
     };
@@ -376,25 +502,39 @@
       if (k === 'signdate_full'){
         var s = o.signdate;
         if (s){ var a = s.split('-'); el.innerHTML = '<b>' + a[0] + '</b>년   <b>' + Number(a[1]) + '</b>월   <b>' + Number(a[2]) + '</b>일'; }
-        else el.innerHTML = '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;년 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;월 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;일';
-        el.style.whiteSpace = 'pre';
+        else el.textContent = '        년       월       일';
         return;
       }
       el.textContent = map[k] || '';
     });
-
     document.querySelectorAll('[data-cb]').forEach(function(el){ el.classList.toggle('on', !!o[el.dataset.cb]); });
 
-    var w = Number(digits(o.wage));
-    document.getElementById('wageWarn').style.display = (w && w < 10320) ? 'block' : 'none';
+    document.getElementById('articles').innerHTML = articles(o, m);
+    fitContract();
 
-    // PDF 저장 시 기본 파일명
-    document.title = '근로계약서_' + (map.name || '이름없음') + (o.signdate ? '_' + o.signdate.replace(/-/g,'') : '');
-
+    document.title = '근로계약서_' + (isMonth ? '월급_' : '파트_') + (map.name || '이름없음') + (o.signdate ? '_' + o.signdate.replace(/-/g,'') : '');
     try { localStorage.setItem(STORE, JSON.stringify(o)); } catch(e){}
   }
 
-  // 입력 시 자동 포맷
+  // 근로계약서가 A4 한 장에 들어가도록 조항 글자 크기를 자동 조정 (최소 8.4pt). 그래도 넘치면 2장으로 인쇄
+  function fitContract(){
+    var sh = document.getElementById('contract');
+    var mm = 3.7795;
+    var limit = (297 - 14 - 12) * mm - 4;
+    function contentH(){
+      var first = sh.querySelector('h1'), last = sh.querySelector('.signblock');
+      return last.getBoundingClientRect().bottom - first.getBoundingClientRect().top;
+    }
+    var size = 9.5;
+    sh.style.setProperty('--art', size + 'pt');
+    while (contentH() > limit && size > 8.8){ size = Math.round((size - 0.1) * 10) / 10; sh.style.setProperty('--art', size + 'pt'); }
+    // 글자를 줄여도 안 들어가면 읽기 좋은 크기로 되돌리고 2장으로 인쇄
+    var two = contentH() > limit;
+    if (two) sh.style.setProperty('--art', '9.5pt');
+    document.getElementById('overBadge').style.display = two ? 'block' : 'none';
+  }
+
+  /* ───── 이벤트 ───── */
   form.addEventListener('input', function(e){
     var el = e.target;
     if (el.name === 'phone'){ el.value = fmtPhone(el.value); }
@@ -402,7 +542,8 @@
       el.value = digits(el.value);
       if (el.name === 'rrn1' && el.value.length === 6) form.elements.rrn2.focus();
     }
-    if (el.name === 'wage'){ el.value = fmtWage(el.value); }
+    if (el.name === 'wage' || el.name === 'mrate'){ el.value = money(digits(el.value)); }
+    if (el.name === 'mhours'){ el.value = digits(el.value); }
     render();
   });
   form.addEventListener('change', render);
@@ -410,14 +551,17 @@
   document.getElementById('btnPrint').addEventListener('click', function(){ render(); window.print(); });
   document.getElementById('btnReset').addEventListener('click', function(){
     if (!confirm('입력한 내용을 모두 지우고 새 계약서를 작성할까요?')) return;
+    var keepType = form.elements.ctype.value;
     form.reset();
+    form.elements.ctype.value = keepType;
     form.elements.signdate.value = today();
     render();
   });
+  window.addEventListener('beforeprint', render);
 
-  // 시작: 저장된 내용 불러오기, 없으면 작성일 = 오늘
   var saved = null;
   try { saved = JSON.parse(localStorage.getItem(STORE) || 'null'); } catch(e){}
+  if (!saved){ try { saved = JSON.parse(localStorage.getItem('singlemarks_contract_generator_v2') || 'null'); } catch(e){} }
   if (saved) write(saved);
   if (!form.elements.signdate.value) form.elements.signdate.value = today();
   render();
